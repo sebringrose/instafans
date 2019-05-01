@@ -15,10 +15,14 @@ module.exports = {
       page.on('request', async (request) => {
         if (await request._resourceType.match('xhr')) {
           // remake requests and store response data
-          let response = await fetch(request._url, { headers: request._headers })
-          let json = await response.json()
-          console.log(json)
-          responses.push(json)
+          try {
+            let response = await fetch(request._url, { headers: request._headers })
+            let json = await response.json()
+            console.log(json)
+            responses.push(json)
+          } catch(error) {
+            console.log(error)
+          }
         }
       })
 
@@ -29,21 +33,29 @@ module.exports = {
 
       // autoscroll system
       await page.evaluate( async() => {
-        console.log('in here')
         await new Promise((resolve, reject) => {
-          let totalHeight = 0;
-          let distance = 100;
+          // to get to posts
+          window.scrollBy(0, 375);
+
+          let totalHeight = 375;
+          let distance = 500;
+
           var timer = setInterval(() => {
-            console.log("inside scroll timer")
             let scrollHeight = document.body.scrollHeight;
             window.scrollBy(0, distance);
             totalHeight += distance;
 
-            if(totalHeight >= scrollHeight){
-                console.log("cleared scroll timer")
+            // changed to get two requests for now
+            // if (totalHeight >= scrollHeight) {
+            //     clearInterval(timer);
+            //     resolve();
+            // }
+
+            if (totalHeight > 1500) {
                 clearInterval(timer);
                 resolve();
             }
+
           }, 400);
         })
       })

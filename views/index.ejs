@@ -1,0 +1,98 @@
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Metier IG Analysis Demo</title>
+    <style media="screen">
+      html, body { min-height: 100vh; min-width: 100vw; margin: 0px; background-color: #333; font-family: sans-serif; }
+      body { display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; }
+      h1 { margin: 20px; }
+      ul { margin: 20px; list-style-type: none; margin: 0px; padding: 0px; }
+      li { max-width: 800px; margin: 20px; }
+      .row { display: flex; align-items: center; }
+      img { height: 200px; margin: 10px; border-radius: 10px; }
+      .details { display: flex; flex-wrap: wrap; }
+      p { margin: 5px; }
+      strong { color: #999; }
+      .comments { max-width: 500px; margin: auto auto; padding-bottom: 20px; }
+      a { color: skyblue; }
+      .notes { max-width: 500px; }
+    </style>
+  </head>
+
+  <body>
+    <h1><%= posts[0].owner %>'s past 24 posts:</h1>
+    <div class="row">
+      <p>Sort by: </p><button onclick="sort('date')">date</button><button onclick="sort('likes')">likes</button>&nbsp;
+      <p>Comments: </p><button onclick="expandComments()">show</button><button onclick="hideComments()">hide</button>
+    </div>
+    <ul>
+      <% posts.forEach(el => { %>
+        <li>
+          <div class="row">
+            <img src="<%=el.thumbnailUri%>" alt="post-image">
+            <div>
+              <p><%=el.caption%></p>
+              <div class="details">
+                <p><strong>Link: </strong>instagram.com/p/<%=el.shortcode%>&nbsp;</p>
+                <p><strong>Date Posted: </strong><%=el.date%>&nbsp;</p>
+                <% if (el.location) { %>
+                  <p><strong>Location: </strong><%=el.location%>&nbsp;</p>
+                <% } %>
+                <% if (el.type === "GraphVideo") { %>
+                  <p><strong>Views: </strong><%=el.views%>&nbsp;</p>
+                <% } %>
+                <p><strong>Likes: </strong><%=el.likes%>&nbsp;</p>
+                <% if (el.comments) { %>
+                  <p><strong>Comments: </strong><%=el.comments.length%>&nbsp;</p>
+                <% } else { %>
+                  <p><strong>Comments: </strong>0&nbsp;</p>
+                <% } %>
+              </div>
+            </div>
+          </div>
+          <div class="comments">
+            <% if (el.comments) { %>
+              <ul>
+                <% el.comments.forEach(comment => { %>
+                  <li>
+                    <a href="<%=origin%>/user?handle=<%= encodeURI(comment.user) %>"><%=comment.user%></a>
+                    <p><%=comment.text%></p>
+                    <p><strong>Date posted: </strong><%=comment.date%></p>
+                  </li>
+                <% }) %>
+              </ul>
+            <% } %>
+          </div>
+        </li>
+      <% }) %>
+    </ul>
+    <div class="notes">
+      <p><strong>NOTES: </strong>This is a demo app built in a couple of hours, it merely displays public instagram account data. The real value of this data lies in being able to:</p>
+      <ul>
+        <li>Track mulitple accounts to identify and share growth tactics (e.g. time of day to post, people to collaborate with, hashtags to use, themes to include in content etc).</li>
+        <li>Analyse users/customers follower base to provide ANONYMOUS information on followers that can be used to improve engagement across social platforms (e.g. who their followers follow, follower's interests, geographic location etc)</li>
+      </ul>
+    </div>
+
+    <script type="text/javascript">
+      function expandComments(id) {
+        var commentDivs = document.getElementsByClassName('comments')
+        for (var i=0; i<commentDivs.length; i++) {
+          commentDivs[i].style.display = "block"
+        }
+      }
+
+      function hideComments(id) {
+        var commentDivs = document.getElementsByClassName('comments')
+        for (var i=0; i<commentDivs.length; i++) {
+          commentDivs[i].style.display = "none"
+        }
+      }
+
+      function sort(sort) {
+        window.location.href = window.location.href + "&sortBy=" + sort
+      }
+    </script>
+
+  </body>
+</html>

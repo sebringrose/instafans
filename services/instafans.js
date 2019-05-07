@@ -18,10 +18,9 @@ module.exports = {
           try {
             let response = await fetch(request._url, { headers: request._headers })
             let json = await response.json()
-            console.log(json)
             responses.push(json)
           } catch(error) {
-            console.log(error)
+            //console.log(error)
           }
         }
       })
@@ -56,7 +55,7 @@ module.exports = {
                 resolve();
             }
 
-          }, 400);
+          }, 200);
         })
       })
       await page.screenshot({path: 'ig-bottom-screenshot.png'});

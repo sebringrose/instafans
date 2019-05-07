@@ -27,7 +27,9 @@ module.exports = {
           post.owner = niceResponse.node.owner.username
           post.type = niceResponse.node.__typename
           post.thumbnailUri = niceResponse.node.thumbnail_src
-          post.caption = niceResponse.node.edge_media_to_caption.edges[0].node.text
+          if (niceResponse.node.edge_media_to_caption.edges[0]) {
+            post.caption = niceResponse.node.edge_media_to_caption.edges[0].node.text
+          }
           post.date = niceResponse.node.taken_at_timestamp
           if (niceResponse.node.edge_media_to_tagged_user.edges[0]) {
             post.taggedUsers = []
@@ -36,11 +38,10 @@ module.exports = {
             }
           }
           if (niceResponse.node.location) post.location = niceResponse.node.location.name
-          if (post.type === "GraphVideo") post.viewCount = niceResponse.node.video_view_count
+          if (post.type === "GraphVideo") post.views = niceResponse.node.video_view_count
           if (niceResponse.node.edge_media_to_comment.edges[0]) {
             post.comments = []
             for (var iCom = 0; iCom < niceResponse.node.edge_media_to_comment.edges.length; iCom++) {
-              console.log(niceResponse.node.edge_media_to_comment.edges[iCom])
               post.comments.push({
                 user: niceResponse.node.edge_media_to_comment.edges[iCom].node.owner.username,
                 text: niceResponse.node.edge_media_to_comment.edges[iCom].node.text,

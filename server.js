@@ -17,7 +17,7 @@ app.use(function(req, res, next) {
 
 // root endpoint gives info
 app.get('/', function (req, res) {
-  res.send("<h2>instafans</h2><p>Whaddup ✌️ Head over to /user=?[put instagram handle here] to get a user's post data.</p>")
+  res.send("<h2>Metier IG Analysis Demo</h2><p>Hey there ✌️ Head over to /user=?[put instagram handle here] to get a user's post data.</p>")
 })
 
 // endpont for instafans data function calls, takes handle as query param
